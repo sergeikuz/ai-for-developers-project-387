@@ -4,6 +4,7 @@
 
 [![ci-tests](https://github.com/sergeikuz/ai-for-developers-project-387/actions/workflows/ci-tests.yml/badge.svg)](https://github.com/sergeikuz/ai-for-developers-project-387/actions/workflows/ci-tests.yml)
 [![hexlet-check](https://github.com/sergeikuz/ai-for-developers-project-387/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/sergeikuz/ai-for-developers-project-387/actions/workflows/hexlet-check.yml)
+[![lighthouse-nightly](https://github.com/sergeikuz/ai-for-developers-project-387/actions/workflows/lighthouse-nightly.yml/badge.svg)](https://github.com/sergeikuz/ai-for-developers-project-387/actions/workflows/lighthouse-nightly.yml)
 
 ## Stack
 
@@ -202,6 +203,7 @@ make docker-run       # run Docker container on port 4010
 | Workflow | Описание |
 |---|---|
 | [ci-tests.yml](.github/workflows/ci-tests.yml) | Полный CI: линт, тайпчек, сборка, backend pytest, Playwright E2E |
+| [lighthouse-nightly.yml](.github/workflows/lighthouse-nightly.yml) | Ночной Lighthouse-аудит: сборка, запуск backend, проверка 3 страниц, авто-создание issue при проблемах |
 | [hexlet-check.yml](.github/workflows/hexlet-check.yml) | Автоматическая проверка Hexlet |
 
 Тесты запускаются на каждый push и pull request в `main`/`master`. Статус доступен во вкладке **Actions** репозитория.
@@ -221,6 +223,15 @@ make docker-run       # run Docker container on port 4010
 - Полный путь бронирования: выбор типа → дата → слот → форма → подтверждение
 - Забронированный слот отображается как "Занято"
 - Админка: бронирование появляется в таблице
+
+### Lighthouse Nightly Audit
+
+Ежедневно в 2:00 UTC (также доступен ручной запуск):
+- Собирает production-версию фронтенда
+- Запускает backend и проверяет 3 ключевые страницы через Lighthouse CLI
+- Проверяет пороги: Performance ≥ 70, Accessibility ≥ 90, Best Practices ≥ 90, SEO ≥ 90
+- При обнаружении проблем создаёт GitHub issue с таблицей метрик
+- HTML-отчёты сохраняются как артефакты на 30 дней
 
 ## Architecture
 
