@@ -6,7 +6,7 @@ export default function HomePage() {
   return (
     <Box
       style={{
-        background: 'linear-gradient(135deg, #dbeafe 0%, #fef3e2 40%, #f9fafb 100%)',
+        background: 'linear-gradient(135deg, var(--app-gradient-start) 0%, var(--app-gradient-mid) 40%, var(--app-gradient-end) 100%)',
         minHeight: 'calc(100vh - 60px)',
       }}
     >
@@ -45,7 +45,7 @@ export default function HomePage() {
             padding="xl"
             radius="lg"
             withBorder
-            style={{ flex: 1, maxWidth: 520, background: 'rgba(255,255,255,0.85)' }}
+            style={{ flex: 1, maxWidth: 520, background: 'var(--app-card-overlay)' }}
           >
             <Title order={3} mb="md">
               Возможности
