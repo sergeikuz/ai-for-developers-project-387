@@ -1,0 +1,17 @@
+[project]
+name = "calendar-booking-backend"
+version = "0.1.0"
+description = "Calendar Booking API backend"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.115.0",
+    "pydantic>=2.9.0",
+    "uvicorn>=0.30.0",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "httpx>=0.28.1",
+    "pytest>=9.0.3",
+    "pyyaml>=6.0.3",
+]

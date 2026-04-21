@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: calendar-booking
+    env: docker
+    plan: free
+    healthCheckPath: /event-types
+    envVars:
+      - key: PORT
+        value: 10000
