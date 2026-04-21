@@ -30,7 +30,7 @@ jobs:
         run: cd typespec && npx tsp compile main.tsp
 
       - name: Generate TypeScript API client
-        run: npm run api:gen
+        run: npx openapi-typescript-codegen --input typespec/tsp-output/openapi/openapi.yaml --output src/api/generated --client fetch
 
       - name: TypeScript typecheck
         run: npx tsc -b --noEmit
@@ -53,6 +53,16 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install TypeSpec dependencies
+        run: cd typespec && npm install
+
+      - name: Compile TypeSpec → OpenAPI
+        run: cd typespec && npx tsp compile main.tsp
 
       - name: Install backend dependencies
         run: cd backend && uv sync
@@ -94,7 +104,7 @@ jobs:
         run: cd typespec && npx tsp compile main.tsp
 
       - name: Generate TypeScript API client
-        run: npm run api:gen
+        run: npx openapi-typescript-codegen --input typespec/tsp-output/openapi/openapi.yaml --output src/api/generated --client fetch
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
