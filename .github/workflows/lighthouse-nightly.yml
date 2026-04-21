@@ -1,0 +1,96 @@
+name: Lighthouse Nightly Audit
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Copy built frontend to backend
+        run: cp -r dist backend/dist
+
+      - name: Install backend dependencies
+        run: cd backend && uv sync
+
+      - name: Start backend
+        run: cd backend && uv run uvicorn main:app --host 0.0.0.0 --port 4010 &
+        shell: bash
+
+      - name: Wait for backend
+        run: |
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:4010/event-types > /dev/null; then
+              echo "Backend is ready"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Backend failed to start"
+          exit 1
+
+      - name: Run Lighthouse audit
+        run: |
+          mkdir -p lighthouse-reports
+          CHROME_FLAGS="--no-sandbox --disable-gpu --disable-dev-shm-usage"
+
+          npx lighthouse http://localhost:4010/ \
+            --output json --output html \
+            --output-path ./lighthouse-reports/home \
+            --chrome-flags="$CHROME_FLAGS" \
+            --only-categories=performance,accessibility,best-practices,seo
+
+          npx lighthouse http://localhost:4010/book \
+            --output json --output html \
+            --output-path ./lighthouse-reports/catalog \
+            --chrome-flags="$CHROME_FLAGS" \
+            --only-categories=performance,accessibility,best-practices,seo
+
+          npx lighthouse http://localhost:4010/book/meeting-15 \
+            --output json --output html \
+            --output-path ./lighthouse-reports/booking \
+            --chrome-flags="$CHROME_FLAGS" \
+            --only-categories=performance,accessibility,best-practices,seo
+
+      - name: Check results and create issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: node scripts/lighthouse-check.js
+
+      - name: Upload Lighthouse reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-reports
+          path: lighthouse-reports/*.html
+          retention-days: 30
