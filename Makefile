@@ -1,4 +1,4 @@
-.PHONY: help install dev build lint typecheck preview typespec api-gen typespec-gen mock clean backend-install backend-dev backend-test e2e-test e2e-install test docker-build docker-run
+.PHONY: help install dev build lint typecheck preview typespec api-gen typespec-gen mock clean backend-install backend-dev backend-test e2e-test e2e-install test docker-build docker-run lighthouse-audit lighthouse-install
 
 help:
 	@echo "Calendar Booking App — Available commands:"
@@ -19,6 +19,8 @@ help:
 	@echo "  make e2e-test     Run Playwright E2E tests"
 	@echo "  make e2e-install  Install Playwright browsers (chromium)"
 	@echo "  make test         Run all tests (lint + backend + e2e)"
+	@echo "  make lighthouse-install  Install Lighthouse CLI globally"
+	@echo "  make lighthouse-audit    Run Lighthouse audit on built app"
 	@echo "  make clean        Remove build artifacts and caches"
 	@echo "  make docker-build Build Docker image"
 	@echo "  make docker-run   Run Docker container on port 4010"
@@ -79,3 +81,17 @@ docker-build:
 
 docker-run:
 	docker run -p 4010:4010 -e PORT=4010 calendar-booking
+
+lighthouse-install:
+	npm install -g lighthouse
+
+lighthouse-audit: build
+	cp -r dist backend/dist
+	cd backend && uv run uvicorn main:app --host 0.0.0.0 --port 4010 &
+	@sleep 3
+	mkdir -p lighthouse-reports
+	lighthouse http://localhost:4010/ --output json --output html --output-path ./lighthouse-reports/home --only-categories=performance,accessibility,best-practices,seo
+	lighthouse http://localhost:4010/book --output json --output html --output-path ./lighthouse-reports/catalog --only-categories=performance,accessibility,best-practices,seo
+	lighthouse http://localhost:4010/book/meeting-15 --output json --output html --output-path ./lighthouse-reports/booking --only-categories=performance,accessibility,best-practices,seo
+	@echo "Reports saved to lighthouse-reports/"
+	@pkill -f "uvicorn main:app" || true
