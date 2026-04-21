@@ -9,6 +9,7 @@ Calendar booking app — **Design First** approach. `typespec/main.tsp` is the s
 - **API contract:** TypeSpec → OpenAPI → generated TS client (`openapi-typescript-codegen --client fetch`)
 - **Mock:** Prism on port **4010** (use when backend is not running)
 - **E2E tests:** Playwright (Chromium) in `e2e/`
+- **Performance audit:** Lighthouse CLI in `scripts/`
 
 ## Commands
 
@@ -25,8 +26,10 @@ make backend-dev      # start FastAPI backend on port 4010
 make backend-test     # run backend pytest tests
 make e2e-test         # run Playwright E2E tests (starts dev + backend automatically)
 make e2e-install      # install Playwright browsers (chromium)
+make lighthouse-install  # install Lighthouse CLI globally
+make lighthouse-audit    # build + run Lighthouse audit on 3 pages
 make test             # run all tests (backend + e2e)
-make clean            # removes node_modules, dist, tsp-output, src/api/generated, backend caches
+make clean            # removes node_modules, dist, tsp-output, src/api/generated, lighthouse-reports, backend caches
 make docker-build     # build Docker image
 make docker-run       # run Docker container on port 4010
 ```
@@ -82,6 +85,9 @@ backend/
 e2e/
   home.spec.ts        # Playwright E2E tests — home page
   booking.spec.ts     # Playwright E2E tests — booking flow + admin
+
+scripts/
+  lighthouse-check.js  # Parse Lighthouse JSON reports and create GitHub issues
 ```
 
 ## Routing
@@ -168,6 +174,16 @@ main.py → models.py → store.py
 make lint && make build    # Frontend typecheck + lint
 make backend-test           # 30 pytest tests (functional + contract compliance)
 make e2e-test               # Playwright E2E (booking flow + admin)
+make lighthouse-audit       # Lighthouse performance audit (3 pages)
 ```
 
 All must pass. ESLint warnings from `src/api/generated/` are expected (from codegen directive comments).
+
+### CI Workflows
+
+| Workflow | Trigger | Description |
+|---|---|---|
+| `ci-tests.yml` | push/PR to main | lint + typecheck + build + backend tests + e2e |
+| `lighthouse-nightly.yml` | daily 2:00 UTC + manual | Lighthouse audit on 3 pages, auto-creates issue on failure |
+| `weekly_code_audit.yml` | weekly Tuesday 17:15 UTC | OpenCode audit for TODO/FIXME/HACK comments |
+| `hexlet-check.yml` | push | Hexlet project check |
