@@ -1,5 +1,7 @@
 import fs from 'fs'
 import { execSync } from 'child_process'
+import os from 'os'
+import path from 'path'
 
 const THRESHOLDS = {
   performance: 0.70,
@@ -63,9 +65,9 @@ function checkThresholds() {
 }
 
 function scoreDisplay(score) {
-  if (score >= 0.9) return `\`${(score * 100).toFixed(0)}\` ✅`
-  if (score >= 0.7) return `\`${(score * 100).toFixed(0)}\` ⚠️`
-  return `\`${(score * 100).toFixed(0)}\` ❌`
+  if (score >= 0.9) return `${(score * 100).toFixed(0)} ✅`
+  if (score >= 0.7) return `${(score * 100).toFixed(0)} ⚠️`
+  return `${(score * 100).toFixed(0)} ❌`
 }
 
 function buildIssueBody({ results, problems }) {
@@ -74,7 +76,7 @@ function buildIssueBody({ results, problems }) {
   let body = `## Lighthouse Nightly Audit — ${date}\n\n`
 
   if (problems.length > 0) {
-    body += `### 🚨 Обнаружены проблемы\n\n`
+    body += `### Обнаружены проблемы\n\n`
     body += `| Страница | Категория | Score | Порог |\n`
     body += `|---|---|---|---|\n`
     for (const p of problems) {
@@ -114,15 +116,33 @@ function checkDuplicateIssue() {
   }
 }
 
+function ensureLabel() {
+  try {
+    execSync(`gh label list --search "lighthouse-audit" --limit 1`, { encoding: 'utf8' })
+  } catch {
+    execSync(`gh label create "lighthouse-audit" --color "FF0000" --description "Lighthouse audit failure"`, { encoding: 'utf8' })
+    console.log('Created label: lighthouse-audit')
+  }
+}
+
 function createIssue(body) {
   const date = new Date().toISOString().split('T')[0]
   const title = `Lighthouse Audit — ${date} — есть проблемы`
 
-  execSync(
-    `gh issue create --title "${title}" --body "${body}" --label "lighthouse-audit"`,
-    { encoding: 'utf8', stdio: 'inherit' }
-  )
-  console.log(`Issue created: ${title}`)
+  const tmpFile = path.join(os.tmpdir(), `lh-issue-${Date.now()}.md`)
+  fs.writeFileSync(tmpFile, body, 'utf8')
+
+  try {
+    ensureLabel()
+
+    execSync(
+      `gh issue create --title "${title}" --body-file "${tmpFile}" --label "lighthouse-audit"`,
+      { encoding: 'utf8', stdio: 'inherit' }
+    )
+    console.log(`Issue created: ${title}`)
+  } finally {
+    fs.unlinkSync(tmpFile)
+  }
 }
 
 function main() {
