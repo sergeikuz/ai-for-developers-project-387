@@ -2,8 +2,8 @@
 
 Приложение для онлайн-бронирования встреч. Дизайн-первый подход с TypeSpec как единым источником истины для API.
 
-[![e2e-tests](https://github.com/sergeikuz/ai-for-developers-project-386/actions/workflows/e2e.yml/badge.svg)](https://github.com/sergeikuz/ai-for-developers-project-386/actions)
-[![hexlet-check](https://github.com/sergeikuz/ai-for-developers-project-386/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/sergeikuz/ai-for-developers-project-386/actions)
+[![ci-tests](https://github.com/sergeikuz/ai-for-developers-project-387/actions/workflows/ci-tests.yml/badge.svg)](https://github.com/sergeikuz/ai-for-developers-project-387/actions/workflows/ci-tests.yml)
+[![hexlet-check](https://github.com/sergeikuz/ai-for-developers-project-387/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/sergeikuz/ai-for-developers-project-387/actions/workflows/hexlet-check.yml)
 
 ## Stack
 
@@ -201,12 +201,20 @@ make docker-run       # run Docker container on port 4010
 
 | Workflow | Описание |
 |---|---|
-| [e2e.yml](.github/workflows/e2e.yml) | Playwright E2E-тесты: запускает фронтенд + бэкенд, проверяет полный путь бронирования |
+| [ci-tests.yml](.github/workflows/ci-tests.yml) | Полный CI: линт, тайпчек, сборка, backend pytest, Playwright E2E |
 | [hexlet-check.yml](.github/workflows/hexlet-check.yml) | Автоматическая проверка Hexlet |
 
-E2E-тесты запускаются на каждый push и pull request в `main`/`master`. Статус доступен во вкладке **Actions** репозитория.
+Тесты запускаются на каждый push и pull request в `main`/`master`. Статус доступен во вкладке **Actions** репозитория.
 
-### E2E-сценарии
+### Тесты
+
+**Backend (pytest):**
+- CRUD типов событий (создание, чтение, обновление, удаление)
+- Генерация и валидация слотов (рабочие часы, будни)
+- Бронирование (создание, дубликаты, прошедшие даты, окно доступности)
+- Контрактные тесты (соответствие TypeSpec спецификации)
+
+**E2E (Playwright):**
 
 - Главная страница: отображение CTA, навигация на /book
 - Каталог событий: карточки типов событий, переход на бронирование
