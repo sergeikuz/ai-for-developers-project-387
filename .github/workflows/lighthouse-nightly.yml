@@ -42,6 +42,12 @@ jobs:
       - name: Install backend dependencies
         run: cd backend && uv sync
 
+      - name: Install Chrome
+        run: |
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg
+          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+          sudo apt-get update && sudo apt-get install -y google-chrome-stable
+
       - name: Start backend
         run: cd backend && uv run uvicorn main:app --host 0.0.0.0 --port 4010 &
         shell: bash
@@ -61,7 +67,7 @@ jobs:
       - name: Run Lighthouse audit
         run: |
           mkdir -p lighthouse-reports
-          CHROME_FLAGS="--no-sandbox --disable-gpu --disable-dev-shm-usage"
+          CHROME_FLAGS="--headless --no-sandbox --disable-gpu --disable-dev-shm-usage"
 
           npx lighthouse http://localhost:4010/ \
             --output json --output html \
