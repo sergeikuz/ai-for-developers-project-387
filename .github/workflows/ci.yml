@@ -36,6 +36,9 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
+      - name: Compile TypeSpec
+        run: make typespec
+
       - name: Run lint
         run: make lint
         env:
