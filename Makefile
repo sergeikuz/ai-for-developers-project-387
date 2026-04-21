@@ -66,7 +66,7 @@ backend-test:
 	cd backend && uv run pytest -v
 
 clean:
-	rm -rf node_modules dist typespec/node_modules typespec/tsp-output typespec/.tsp src/api/generated backend/__pycache__ backend/.pytest_cache backend/.venv
+	rm -rf node_modules dist typespec/node_modules typespec/tsp-output typespec/.tsp src/api/generated backend/__pycache__ backend/.pytest_cache backend/.venv lighthouse-reports
 
 e2e-test:
 	npx playwright test

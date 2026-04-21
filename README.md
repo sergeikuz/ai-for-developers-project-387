@@ -191,7 +191,9 @@ make backend-test     # run backend pytest tests
 make e2e-test         # run Playwright E2E tests (starts dev + backend automatically)
 make e2e-install      # install Playwright browsers (chromium)
 make test             # run all tests (lint + backend + e2e)
-make clean            # removes node_modules, dist, tsp-output, src/api/generated, backend caches
+make lighthouse-install  # install Lighthouse CLI globally
+make lighthouse-audit    # build + run Lighthouse audit on 3 pages
+make clean            # removes node_modules, dist, tsp-output, src/api/generated, lighthouse-reports, backend caches
 make docker-build     # build Docker image
 make docker-run       # run Docker container on port 4010
 ```
@@ -232,6 +234,12 @@ make docker-run       # run Docker container on port 4010
 - Проверяет пороги: Performance ≥ 70, Accessibility ≥ 90, Best Practices ≥ 90, SEO ≥ 90
 - При обнаружении проблем создаёт GitHub issue с таблицей метрик
 - HTML-отчёты сохраняются как артефакты на 30 дней
+
+**Локальный запуск:**
+```bash
+make lighthouse-install   # установка Lighthouse CLI
+make lighthouse-audit     # сборка + аудит → отчёты в lighthouse-reports/
+```
 
 ## Architecture
 
