@@ -26,7 +26,7 @@ function HostAvatar() {
           position: 'absolute',
           inset: 0,
           borderRadius: '50%',
-          background: 'linear-gradient(180deg, #fdba74 0%, #fdba74 50%, #2dd4bf 50%, #2dd4bf 100%)',
+          background: 'linear-gradient(180deg, var(--app-avatar-orange) 0%, var(--app-avatar-orange) 50%, var(--app-avatar-teal) 50%, var(--app-avatar-teal) 100%)',
         }}
       />
       <Box
@@ -38,7 +38,7 @@ function HostAvatar() {
           width: 16,
           height: 16,
           borderRadius: '50%',
-          background: '#fdba74',
+          background: 'var(--app-avatar-orange)',
         }}
       />
     </Box>
@@ -47,9 +47,9 @@ function HostAvatar() {
 
 function InfoBox({ label, value }: { label: string; value: string }) {
   return (
-    <Box style={{ background: '#f1f5f9', borderRadius: 8, padding: '10px 12px' }}>
+    <Box style={{ background: 'var(--app-surface-muted)', borderRadius: 8, padding: '10px 12px' }}>
       <Text size="xs" c="dimmed" mb={2}>{label}</Text>
-      <Text size="sm" fw={500} style={{ color: '#0f172a' }}>{value}</Text>
+      <Text size="sm" fw={500} style={{ color: 'var(--app-text-primary)' }}>{value}</Text>
     </Box>
   )
 }
@@ -80,12 +80,12 @@ function CalendarGrid({
   while (cells.length % 7 !== 0) cells.push(null)
 
   return (
-    <Card padding="lg" radius="lg" withBorder style={{ flex: 1, minWidth: 280, background: '#fff', borderColor: '#e5e7eb' }}>
+    <Card padding="lg" radius="lg" withBorder style={{ flex: 1, minWidth: 280, background: 'var(--app-card-bg)', borderColor: 'var(--app-card-border)' }}>
       <Group justify="space-between" mb="md">
-        <Title order={4} style={{ color: '#0f172a' }}>Календарь</Title>
+        <Title order={4} style={{ color: 'var(--app-text-primary)' }}>Календарь</Title>
         <Group gap={4}>
-          <Button variant="outline" size="xs" radius="sm" onClick={onPrevMonth} style={{ borderColor: '#e5e7eb', color: '#374151' }}>←</Button>
-          <Button variant="outline" size="xs" radius="sm" onClick={onNextMonth} style={{ borderColor: '#e5e7eb', color: '#374151' }}>→</Button>
+          <Button variant="outline" size="xs" radius="sm" onClick={onPrevMonth} style={{ borderColor: 'var(--app-card-border)', color: 'var(--app-text-button)' }}>←</Button>
+          <Button variant="outline" size="xs" radius="sm" onClick={onNextMonth} style={{ borderColor: 'var(--app-card-border)', color: 'var(--app-text-button)' }}>→</Button>
         </Group>
       </Group>
       <Text size="sm" c="dimmed" mb="sm">
@@ -116,8 +116,8 @@ function CalendarGrid({
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
-                background: isSelected ? '#fff7ed' : '#f1f5f9',
-                border: isSelected ? '2px solid #f97316' : '2px solid transparent',
+                background: isSelected ? 'var(--app-surface-selected)' : 'var(--app-surface-muted)',
+                border: isSelected ? '2px solid var(--app-accent-border)' : '2px solid transparent',
                 transition: 'all 0.1s',
               }}
             >
@@ -207,26 +207,26 @@ export default function BookingPage() {
   })
 
   return (
-    <Box style={{ background: 'linear-gradient(135deg, #dbeafe 0%, #fef3e2 40%, #f9fafb 100%)', minHeight: 'calc(100vh - 60px)' }}>
+    <Box style={{ background: 'linear-gradient(135deg, var(--app-gradient-start) 0%, var(--app-gradient-mid) 40%, var(--app-gradient-end) 100%)', minHeight: 'calc(100vh - 60px)' }}>
       <Box style={{ maxWidth: 1100, margin: '0 auto', padding: '40px 24px' }}>
-        <Title order={2} mb="xl" style={{ color: '#0f172a' }}>{eventType.title}</Title>
+        <Title order={2} mb="xl" style={{ color: 'var(--app-text-primary)' }}>{eventType.title}</Title>
 
         {slotsLoading ? (
           <Center style={{ height: '40vh' }}><Loader size="lg" /></Center>
         ) : (
           <Group align="flex-start" gap="md" wrap="nowrap" visibleFrom="sm">
             {/* Left column: info */}
-            <Card padding="lg" radius="lg" withBorder style={{ width: 280, flexShrink: 0, background: '#fff', borderColor: '#e5e7eb' }}>
+            <Card padding="lg" radius="lg" withBorder style={{ width: 280, flexShrink: 0, background: 'var(--app-card-bg)', borderColor: 'var(--app-card-border)' }}>
               <Group gap="md" mb="md">
                 <HostAvatar />
                 <div>
-                  <Text fw={700} style={{ color: '#0f172a' }}>Tota</Text>
+                  <Text fw={700} style={{ color: 'var(--app-text-primary)' }}>Tota</Text>
                   <Text size="xs" c="dimmed">Host</Text>
                 </div>
               </Group>
               <Group gap="xs" mb="sm">
-                <Text fw={700} style={{ color: '#0f172a' }}>{eventType.title}</Text>
-                <Badge variant="light" color="gray" size="sm" style={{ background: '#f1f5f9', color: '#64748b' }}>
+                <Text fw={700} style={{ color: 'var(--app-text-primary)' }}>{eventType.title}</Text>
+                <Badge variant="light" color="gray" size="sm" style={{ background: 'var(--app-surface-muted)', color: 'var(--app-text-secondary)' }}>
                   {eventType.duration} мин
                 </Badge>
               </Group>
@@ -251,8 +251,8 @@ export default function BookingPage() {
             />
 
             {/* Right column: slots */}
-            <Card padding="lg" radius="lg" withBorder style={{ width: 280, flexShrink: 0, background: '#fff', borderColor: '#e5e7eb' }}>
-              <Title order={4} mb="md" style={{ color: '#0f172a' }}>Статус слотов</Title>
+            <Card padding="lg" radius="lg" withBorder style={{ width: 280, flexShrink: 0, background: 'var(--app-card-bg)', borderColor: 'var(--app-card-border)' }}>
+              <Title order={4} mb="md" style={{ color: 'var(--app-text-primary)' }}>Статус слотов</Title>
               <Stack gap="xs">
                 {allSlotsForDate.length > 0 ? (
                   allSlotsForDate.map((slot) => {
@@ -266,8 +266,8 @@ export default function BookingPage() {
                         style={{
                           borderRadius: 8,
                           padding: '8px 12px',
-                          background: isSelected ? '#fff7ed' : '#f1f5f9',
-                          border: isSelected ? '2px solid #f97316' : '1px solid #e5e7eb',
+                          background: isSelected ? 'var(--app-surface-selected)' : 'var(--app-surface-muted)',
+                          border: isSelected ? '2px solid var(--app-accent-border)' : '1px solid var(--app-card-border)',
                           cursor: slot.isAvailable ? 'pointer' : 'default',
                           opacity: slot.isAvailable ? 1 : 0.6,
                           display: 'flex',
@@ -291,7 +291,7 @@ export default function BookingPage() {
               </Stack>
               <Divider my="md" />
               <Group grow>
-                <Button variant="outline" radius="md" onClick={() => navigate('/book')} style={{ borderColor: '#e5e7eb', color: '#0f172a', fontWeight: 600 }}>
+                <Button variant="outline" radius="md" onClick={() => navigate('/book')} style={{ borderColor: 'var(--app-card-border)', color: 'var(--app-text-primary)', fontWeight: 600 }}>
                   Назад
                 </Button>
                 <Button
@@ -310,12 +310,12 @@ export default function BookingPage() {
 
         {/* Mobile layout */}
         <Stack gap="md" hiddenFrom="sm">
-          <Card padding="lg" radius="lg" withBorder style={{ background: '#fff', borderColor: '#e5e7eb' }}>
+          <Card padding="lg" radius="lg" withBorder style={{ background: 'var(--app-card-bg)', borderColor: 'var(--app-card-border)' }}>
             <Group gap="md" mb="md">
               <HostAvatar />
-              <div><Text fw={700} style={{ color: '#0f172a' }}>Tota</Text><Text size="xs" c="dimmed">Host</Text></div>
+              <div><Text fw={700} style={{ color: 'var(--app-text-primary)' }}>Tota</Text><Text size="xs" c="dimmed">Host</Text></div>
             </Group>
-            <Group gap="xs"><Text fw={700} style={{ color: '#0f172a' }}>{eventType.title}</Text><Badge variant="light" color="gray" size="sm" style={{ background: '#f1f5f9', color: '#64748b' }}>{eventType.duration} мин</Badge></Group>
+            <Group gap="xs"><Text fw={700} style={{ color: 'var(--app-text-primary)' }}>{eventType.title}</Text><Badge variant="light" color="gray" size="sm" style={{ background: 'var(--app-surface-muted)', color: 'var(--app-text-secondary)' }}>{eventType.duration} мин</Badge></Group>
           </Card>
           <CalendarGrid
             currentDate={calendarMonth}
@@ -325,13 +325,13 @@ export default function BookingPage() {
             onPrevMonth={() => setCalendarMonth((m) => m.subtract(1, 'month'))}
             onNextMonth={() => setCalendarMonth((m) => m.add(1, 'month'))}
           />
-          <Card padding="lg" radius="lg" withBorder style={{ background: '#fff', borderColor: '#e5e7eb' }}>
-            <Title order={4} mb="md" style={{ color: '#0f172a' }}>Статус слотов</Title>
+          <Card padding="lg" radius="lg" withBorder style={{ background: 'var(--app-card-bg)', borderColor: 'var(--app-card-border)' }}>
+            <Title order={4} mb="md" style={{ color: 'var(--app-text-primary)' }}>Статус слотов</Title>
             <Stack gap="xs">
               {allSlotsForDate.length > 0 ? allSlotsForDate.map((slot) => {
                 const isSelected = selectedSlot?.startAt === slot.startAt
                 return (
-                  <Box key={slot.startAt} data-testid={`slot-${slot.startAt}`} data-available={slot.isAvailable} onClick={() => slot.isAvailable && setSelectedSlot({ startAt: slot.startAt, endAt: slot.endAt })} style={{ borderRadius: 8, padding: '8px 12px', background: isSelected ? '#fff7ed' : '#f1f5f9', border: isSelected ? '2px solid #f97316' : '1px solid #e5e7eb', cursor: slot.isAvailable ? 'pointer' : 'default', opacity: slot.isAvailable ? 1 : 0.6, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Box key={slot.startAt} data-testid={`slot-${slot.startAt}`} data-available={slot.isAvailable} onClick={() => slot.isAvailable && setSelectedSlot({ startAt: slot.startAt, endAt: slot.endAt })} style={{ borderRadius: 8, padding: '8px 12px', background: isSelected ? 'var(--app-surface-selected)' : 'var(--app-surface-muted)', border: isSelected ? '2px solid var(--app-accent-border)' : '1px solid var(--app-card-border)', cursor: slot.isAvailable ? 'pointer' : 'default', opacity: slot.isAvailable ? 1 : 0.6, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Text size="sm" fw={500} c={slot.isAvailable ? 'dark' : 'dimmed'}>{dayjs(slot.startAt).format('HH:mm')} - {dayjs(slot.endAt).format('HH:mm')}</Text>
                     <Text size="xs" fw={600} c={slot.isAvailable ? 'dark' : 'dimmed'} data-testid={slot.isAvailable ? 'slot-available' : 'slot-booked'}>{slot.isAvailable ? 'Свободно' : 'Занято'}</Text>
                   </Box>
@@ -340,7 +340,7 @@ export default function BookingPage() {
             </Stack>
             <Divider my="md" />
             <Group grow>
-              <Button variant="outline" radius="md" onClick={() => navigate('/book')} style={{ borderColor: '#e5e7eb', color: '#0f172a', fontWeight: 600 }}>Назад</Button>
+              <Button variant="outline" radius="md" onClick={() => navigate('/book')} style={{ borderColor: 'var(--app-card-border)', color: 'var(--app-text-primary)', fontWeight: 600 }}>Назад</Button>
               <Button color="orange" radius="md" disabled={!selectedSlot} onClick={() => setFormOpened(true)} style={{ fontWeight: 600 }}>Продолжить</Button>
             </Group>
           </Card>

@@ -9,7 +9,7 @@ function HostAvatar() {
         width: 56,
         height: 56,
         borderRadius: '50%',
-        background: 'linear-gradient(180deg, #fdba74 0%, #fdba74 50%, #2dd4bf 50%, #2dd4bf 100%)',
+        background: 'linear-gradient(180deg, var(--app-avatar-orange) 0%, var(--app-avatar-orange) 50%, var(--app-avatar-teal) 50%, var(--app-avatar-teal) 100%)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -21,7 +21,7 @@ function HostAvatar() {
           width: 28,
           height: 28,
           borderRadius: '50%',
-          background: '#fdba74',
+          background: 'var(--app-avatar-orange)',
           position: 'absolute',
           top: 8,
         }}
@@ -50,7 +50,7 @@ export default function EventCatalogPage() {
   }
 
   return (
-    <Box style={{ background: 'linear-gradient(135deg, #dbeafe 0%, #fef3e2 40%, #f9fafb 100%)', minHeight: 'calc(100vh - 60px)' }}>
+    <Box style={{ background: 'linear-gradient(135deg, var(--app-gradient-start) 0%, var(--app-gradient-mid) 40%, var(--app-gradient-end) 100%)', minHeight: 'calc(100vh - 60px)' }}>
       <Box style={{ maxWidth: 900, margin: '0 auto', padding: '40px 24px' }}>
         {/* Host profile card */}
         <Card
@@ -59,18 +59,18 @@ export default function EventCatalogPage() {
           withBorder
           mb="xl"
           style={{
-            background: '#fff',
-            borderColor: '#e5e7eb',
+            background: 'var(--app-card-bg)',
+            borderColor: 'var(--app-card-border)',
           }}
         >
           <Group gap="md" mb="md" align="flex-start">
             <HostAvatar />
             <div>
-              <Text fw={700} size="lg" style={{ color: '#0f172a' }}>Tota</Text>
+              <Text fw={700} size="lg" style={{ color: 'var(--app-text-primary)' }}>Tota</Text>
               <Text size="sm" c="dimmed">Host</Text>
             </div>
           </Group>
-          <Title order={2} mb={4} style={{ color: '#0f172a' }}>
+          <Title order={2} mb={4} style={{ color: 'var(--app-text-primary)' }}>
             Выберите тип события
           </Title>
           <Text size="sm" c="dimmed">
@@ -93,20 +93,20 @@ export default function EventCatalogPage() {
                   textDecoration: 'none',
                   color: 'inherit',
                   cursor: 'pointer',
-                  background: '#fff',
-                  borderColor: '#e5e7eb',
+                  background: 'var(--app-card-bg)',
+                  borderColor: 'var(--app-card-border)',
                   transition: 'border-color 0.15s',
                 }}
                 onMouseEnter={(e) => {
-                  ;(e.currentTarget as HTMLElement).style.borderColor = '#d1d5db'
+                  ;(e.currentTarget as HTMLElement).style.borderColor = 'var(--app-card-border-hover)'
                 }}
                 onMouseLeave={(e) => {
-                  ;(e.currentTarget as HTMLElement).style.borderColor = '#e5e7eb'
+                  ;(e.currentTarget as HTMLElement).style.borderColor = 'var(--app-card-border)'
                 }}
               >
                 <Group justify="space-between" align="flex-start">
                   <div>
-                    <Text fw={700} size="lg" style={{ color: '#0f172a' }}>
+                    <Text fw={700} size="lg" style={{ color: 'var(--app-text-primary)' }}>
                       {et.title}
                     </Text>
                     <Text size="sm" c="dimmed" mt={4}>
@@ -117,11 +117,11 @@ export default function EventCatalogPage() {
                     variant="light"
                     color="gray"
                     size="sm"
-                    style={{
-                      background: '#f1f5f9',
-                      color: '#64748b',
-                      fontWeight: 500,
-                    }}
+                  style={{
+                    background: 'var(--app-surface-muted)',
+                    color: 'var(--app-text-secondary)',
+                    fontWeight: 500,
+                  }}
                   >
                     {et.duration} мин
                   </Badge>

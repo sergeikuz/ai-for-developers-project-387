@@ -1,9 +1,11 @@
-import { Group, Anchor, Box } from '@mantine/core'
+import { Group, Anchor, Box, ActionIcon, useMantineColorScheme, useComputedColorScheme } from '@mantine/core'
 import { Link, useLocation, Outlet } from 'react-router-dom'
-import { IconCalendarEvent } from '@tabler/icons-react'
+import { IconCalendarEvent, IconSun, IconMoon } from '@tabler/icons-react'
 
 export default function Layout() {
   const location = useLocation()
+  const { setColorScheme } = useMantineColorScheme()
+  const computedColorScheme = useComputedColorScheme('light', { getInitialValueInEffect: true })
 
   const navItems = [
     { label: 'Записаться', path: '/book' },
@@ -16,7 +18,7 @@ export default function Layout() {
         <Group h={60} px="xl" justify="space-between" style={{ maxWidth: 1200, margin: '0 auto' }}>
           <Anchor component={Link} to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
             <Group gap={8}>
-              <IconCalendarEvent size={22} color="#f76707" />
+              <IconCalendarEvent size={22} color="var(--app-accent-icon)" />
               <span style={{ fontWeight: 700, fontSize: 16 }}>Calendar</span>
             </Group>
           </Anchor>
@@ -30,7 +32,7 @@ export default function Layout() {
                 c={
                   location.pathname === item.path ||
                   (item.path !== '/book' && location.pathname.startsWith(item.path))
-                    ? 'violet'
+                    ? 'orange'
                     : 'dimmed'
                 }
                 style={{ textDecoration: 'none' }}
@@ -38,6 +40,18 @@ export default function Layout() {
                 {item.label}
               </Anchor>
             ))}
+            <ActionIcon
+              variant="subtle"
+              size="lg"
+              onClick={() => setColorScheme(computedColorScheme === 'light' ? 'dark' : 'light')}
+              aria-label="Переключить тему"
+            >
+              {computedColorScheme === 'dark' ? (
+                <IconSun size={20} color="var(--app-text-primary)" />
+              ) : (
+                <IconMoon size={20} color="var(--app-text-primary)" />
+              )}
+            </ActionIcon>
           </Group>
         </Group>
       </Box>

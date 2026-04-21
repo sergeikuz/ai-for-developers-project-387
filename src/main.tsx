@@ -19,15 +19,16 @@ const queryClient = new QueryClient({
 })
 
 const theme = createTheme({
-  primaryColor: 'violet',
+  primaryColor: 'orange',
   fontFamily: 'system-ui, -apple-system, sans-serif',
+  defaultGradient: { from: '#f76707', to: '#f97316', deg: 135 },
 })
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <MantineProvider theme={theme}>
+        <MantineProvider theme={theme} defaultColorScheme="auto">
           <Notifications position="top-right" />
           <App />
         </MantineProvider>
