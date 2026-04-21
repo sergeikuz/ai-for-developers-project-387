@@ -118,10 +118,13 @@ function checkDuplicateIssue() {
 
 function ensureLabel() {
   try {
-    execSync(`gh label list --search "lighthouse-audit" --limit 1`, { encoding: 'utf8' })
-  } catch {
-    execSync(`gh label create "lighthouse-audit" --color "FF0000" --description "Lighthouse audit failure"`, { encoding: 'utf8' })
+    const output = execSync(`gh label list --json name --limit 100`, { encoding: 'utf8' })
+    const labels = JSON.parse(output || '[]')
+    if (labels.some((l) => l.name === 'lighthouse-audit')) return
+    execSync(`gh label create lighthouse-audit --color FF0000 --description "Lighthouse audit failure"`, { encoding: 'utf8' })
     console.log('Created label: lighthouse-audit')
+  } catch (e) {
+    console.error('Warning: could not create label, issue will be created without it')
   }
 }
 
@@ -134,12 +137,18 @@ function createIssue(body) {
 
   try {
     ensureLabel()
-
     execSync(
       `gh issue create --title "${title}" --body-file "${tmpFile}" --label "lighthouse-audit"`,
       { encoding: 'utf8', stdio: 'inherit' }
     )
     console.log(`Issue created: ${title}`)
+  } catch (e) {
+    console.error('Falling back to creating issue without label')
+    execSync(
+      `gh issue create --title "${title}" --body-file "${tmpFile}"`,
+      { encoding: 'utf8', stdio: 'inherit' }
+    )
+    console.log(`Issue created (no label): ${title}`)
   } finally {
     fs.unlinkSync(tmpFile)
   }
